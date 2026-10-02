@@ -1,0 +1,178 @@
+diff --git a/RepositoryExternal.mk b/RepositoryExternal.mk
+index 60499758d..4ed8813d3 100644
+--- a/RepositoryExternal.mk
++++ b/RepositoryExternal.mk
+@@ -4059,8 +4059,8 @@ else # ! SYSTEM_LIBXML_FOR_BUILD
+ define gb_ExternalExecutable__register_xmllint
+ $(call gb_ExternalExecutable_set_internal,xmllint,$(WORKDIR_FOR_BUILD)/UnpackedTarball/libxml2/$(if $(filter MSC,$(COM)),win32/bin.msvc)/xmllint$(gb_Executable_EXT_for_build),libxml2)
+ $(call gb_ExternalExecutable_add_dependencies,xmllint,\
+-	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
+-	$(call gb_Package_get_target,libxml2) \
++	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target_for_build,icu_ure)) \
++	$(call gb_Package_get_target_for_build,libxml2) \
+ )
+ 
+ endef
+@@ -4076,9 +4076,9 @@ else # ! SYSTEM_LIBXSLT_FOR_BUILD
+ define gb_ExternalExecutable__register_xsltproc
+ $(call gb_ExternalExecutable_set_internal,xsltproc,$(WORKDIR_FOR_BUILD)/UnpackedTarball/libxslt/$(if $(filter MSC,$(COM)),win32/bin.msvc,xsltproc)/xsltproc$(gb_Executable_EXT_for_build),libxslt)
+ $(call gb_ExternalExecutable_add_dependencies,xsltproc,\
+-	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
+-	$(call gb_Package_get_target,libxml2) \
+-	$(call gb_Package_get_target,libxslt) \
++	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target_for_build,icu_ure)) \
++	$(call gb_Package_get_target_for_build,libxml2) \
++	$(call gb_Package_get_target_for_build,libxslt) \
+ )
+ 
+ endef
+diff --git a/configure.ac b/configure.ac
+index 180fd73ee..72519872a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -13275,7 +13275,7 @@ then
+     if test "$QMAKE5" = "no"; then
+         AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+     else
+-        qmake5_test_ver="`$QMAKE5 -v 2>&1 | $SED -n -e 's/^Using Qt version \(5\.[[0-9.]]\+\).*$/\1/p'`"
++        qmake5_test_ver="`$QMAKE5 -v 2>&1 | $SED -n -e 's/^Using Qt version \(5\.[[0-9.]][[0-9.]]*\).*$/\1/p'`"
+         if test -z "$qmake5_test_ver"; then
+             AC_MSG_ERROR([Wrong qmake for Qt5 found. Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+         fi
+diff --git a/external/argon2/ExternalProject_argon2.mk b/external/argon2/ExternalProject_argon2.mk
+index 7e521096a..d8bde670a 100644
+--- a/external/argon2/ExternalProject_argon2.mk
++++ b/external/argon2/ExternalProject_argon2.mk
+@@ -43,7 +43,7 @@ $(call gb_ExternalProject_get_state_target,argon2,build):
+ 	$(call gb_Trace_StartRange,argon2,EXTERNAL)
+ 	$(call gb_ExternalProject_run,build,\
+ 		CFLAGS="$(CFLAGS) $(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden) -fPIC" \
+-		MAKEFLAGS= $(MAKE) \
++		MAKEFLAGS= $(MAKE) $(if $(filter EMSCRIPTEN,$(OS)),libargon2.a AR="$(AR)") \
+ 			OPTTARGET=$(if $(filter X86_64,$(CPUNAME)),x86-64,forcefail) \
+ 		$(if $(CROSS_COMPILING),,&& $(MAKE) test) \
+ 	)
+diff --git a/external/argon2/UnpackedTarball_argon2.mk b/external/argon2/UnpackedTarball_argon2.mk
+index c795a1562..857dd0c97 100644
+--- a/external/argon2/UnpackedTarball_argon2.mk
++++ b/external/argon2/UnpackedTarball_argon2.mk
+@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,argon2,\
+ 	external/argon2/0001-Fix-possible-compiler-error-due-to-undefined-_MSC_VE.patch \
+ 	$(if $(filter WNT_AARCH64,$(OS)_$(CPUNAME)),external/argon2/0002-Add-WinARM64-vcxproj-config.patch) \
+ 	external/argon2/private-symbols.patch.0 \
++	$(if $(filter EMSCRIPTEN,$(OS)),external/argon2/wasm-archiver.patch) \
+ ))
+ 
+ # vim: set noet sw=4 ts=4:
+diff --git a/external/openssl/ExternalProject_openssl.mk b/external/openssl/ExternalProject_openssl.mk
+index 4163125e5..ca0cc72e1 100644
+--- a/external/openssl/ExternalProject_openssl.mk
++++ b/external/openssl/ExternalProject_openssl.mk
+@@ -50,7 +50,7 @@ OPENSSL_PLATFORM := \
+             $(if $(filter X86_64,$(CPUNAME)),darwin64-x86_64-cc)\
+             $(if $(filter AARCH64,$(CPUNAME)),darwin64-arm64-cc)\
+ 	  ,\
+-	    $(if $(filter EMSCRIPTEN,$(OS)),no-engine no-dso no-dgram no-srtp no-err no-ocsp no-psk no-ts no-asm) \
++	    $(if $(filter EMSCRIPTEN,$(OS)),linux-generic32 no-engine no-dso no-dgram no-srtp no-err no-ocsp no-psk no-ts no-asm) \
+           )\
+         )\
+       )\
+@@ -76,7 +76,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
+ 	$(call gb_Trace_StartRange,openssl,EXTERNAL)
+ 	$(call gb_ExternalProject_run,build,\
+ 		unset MAKEFLAGS && \
+-		$(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS iOS,$(OS)), \
++		$(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS iOS EMSCRIPTEN,$(OS)), \
+ 			./Configure, \
+ 		$(if $(filter WNT,$(OS)), \
+ 			$(PERL) Configure, \
+diff --git a/external/zlib/StaticLibrary_zlib.mk b/external/zlib/StaticLibrary_zlib.mk
+index f5263bef7..6463ffc53 100644
+--- a/external/zlib/StaticLibrary_zlib.mk
++++ b/external/zlib/StaticLibrary_zlib.mk
+@@ -26,6 +26,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zlib,\
+ 	UnpackedTarball/zlib/inflate \
+ 	UnpackedTarball/zlib/inftrees \
+ 	UnpackedTarball/zlib/trees \
++	UnpackedTarball/zlib/uncompr \
+ 	UnpackedTarball/zlib/zutil \
+ ))
+ 
+diff --git a/extras/CustomTarget_autotextuser.mk b/extras/CustomTarget_autotextuser.mk
+index f81fb0725..86dbde248 100644
+--- a/extras/CustomTarget_autotextuser.mk
++++ b/extras/CustomTarget_autotextuser.mk
+@@ -34,7 +34,8 @@ $(gb_CustomTarget_workdir)/extras/source/autotext/user/%.xml : $(SRCDIR)/extras/
+ 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+ 	$(call gb_Trace_EndRange,autotext/user/$*.xml,XSL)
+ 
+-$(gb_CustomTarget_workdir)/extras/source/autotext/user/%.bau : \
++$(gb_CustomTarget_workdir)/extras/source/autotext/user/mytexts.bau : \
++        $(gb_CustomTarget_workdir)/extras/source/autotext/user/%.bau : \
+         $$(addprefix $(gb_CustomTarget_workdir)/extras/source/autotext/user/$$*/,\
+             mimetype $$(call extras_AUTOTEXTUSER_XMLFILES_RELATIVE,$$*))
+ 	$(call gb_Output_announce,autotext/user/$*.bau,$(true),ZIP,2)
+diff --git a/solenv/bin/concat-deps.c b/solenv/bin/concat-deps.c
+index 844b8bbd3..7d5523562 100644
+--- a/solenv/bin/concat-deps.c
++++ b/solenv/bin/concat-deps.c
+@@ -1091,7 +1091,7 @@ static int process(struct hash* dep_hash, char* fn)
+                     created_line = generate_phony_line(src_relative, "o");
+                     rc = generate_phony_file(fn, created_line);
+                 }
+-                else if(strncmp(src_relative, "GenAsmObject/", 14) == 0)
++                else if(strncmp(src_relative, "GenAsmObject/", sizeof("GenAsmObject/") - 1) == 0)
+                 {
+                     created_line = generate_phony_line(src_relative, "o");
+                     rc = generate_phony_file(fn, created_line);
+diff --git a/solenv/gbuild/ExternalExecutable.mk b/solenv/gbuild/ExternalExecutable.mk
+index 0982dd9b8..f0a05746c 100644
+--- a/solenv/gbuild/ExternalExecutable.mk
++++ b/solenv/gbuild/ExternalExecutable.mk
+@@ -115,7 +115,7 @@ define gb_ExternalExecutable__set_internal
+ $(if $(3),,$(if $(filter $(WORKDIR_FOR_BUILD)/UnpackedTarball,$(2)),\
+ 	$(call gb_Output_error,depending directly on executable $(2) from UnpackedTarball is not allowed. Use the UnpackedTarball target as dependency.)))
+ gb_ExternalExecutable_$(1)_EXECUTABLE := $(2)
+-gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(3),$(call gb_Executable_get_target_for_build,$(3)),$(2))
++gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(3),$(call gb_ExternalProject_get_target_for_build,$(3)),$(2))
+ gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path)) $(BUILDTOOLTRACE)
+ 
+ endef
+diff --git a/solenv/gbuild/LinkTarget.mk b/solenv/gbuild/LinkTarget.mk
+index 47d1b949b..1184347ea 100644
+--- a/solenv/gbuild/LinkTarget.mk
++++ b/solenv/gbuild/LinkTarget.mk
+@@ -646,7 +646,7 @@ endif
+ gb_GenAsmObject_get_source = $(call gb_AsmObject_get_source,$(WORKDIR),$(1))
+ 
+ $(call gb_GenAsmObject_get_target,%) :
+-	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_GenAsmObject_get_dep_target,$*))
++	$(call gb_AsmObject__command,$@,$*,$(call gb_GenAsmObject_get_source,$*),$(call gb_GenAsmObject_get_dep_target,$*))
+ 
+ ifeq ($(gb_FULLDEPS),$(true))
+ $(dir $(call gb_GenAsmObject_get_dep_target,%)).dir :
+diff --git a/solenv/gbuild/platform/EMSCRIPTEN_INTEL_GCC.mk b/solenv/gbuild/platform/EMSCRIPTEN_INTEL_GCC.mk
+index 613cb0b3b..85f5e91ff 100644
+--- a/solenv/gbuild/platform/EMSCRIPTEN_INTEL_GCC.mk
++++ b/solenv/gbuild/platform/EMSCRIPTEN_INTEL_GCC.mk
+@@ -9,6 +9,11 @@
+ 
+ include $(GBUILDDIR)/platform/unxgcc.mk
+ 
++# Native build tools use the build-platform library suffix.
++ifeq ($(OS_FOR_BUILD),MACOSX)
++gb_Library_PLAINEXT_FOR_BUILD := .dylib
++endif
++
+ gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
+ # avoid -s SAFE_HEAP=1 - c.f. gh#8584 this breaks source maps
+ gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -s SUPPORT_LONGJMP=wasm
+@@ -27,7 +32,7 @@ gb_EMSCRIPTEN_LDFLAGS += -sSTACK_SIZE=131072 -sDEFAULT_PTHREAD_STACK_SIZE=65536
+ # To keep the link time (and memory) down, prevent all rewriting options from wasm-emscripten-finalize
+ # See emscripten.py, finalize_wasm, modify_wasm = True
+ # So we need WASM_BIGINT=1 and ASSERTIONS=1 (2 implies STACK_OVERFLOW_CHECK)
+-gb_EMSCRIPTEN_LDFLAGS += --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16","UTF8ToString","ccall","cwrap","addOnPreMain","addOnPostRun","registerType","throwBindingError","ClassHandle"$(if $(ENABLE_QT6),$(COMMA)"FS"$(COMMA)"callMain"$(COMMA)"specialHTMLTargets")]
++gb_EMSCRIPTEN_LDFLAGS += --bind -s DYNAMIC_EXECUTION=0 -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16","UTF8ToString","ccall","cwrap","addOnPreMain","addOnPostRun","registerType","throwBindingError","ClassHandle"$(if $(ENABLE_QT6),$(COMMA)"FS"$(COMMA)"callMain"$(COMMA)"specialHTMLTargets")]
+ gb_EMSCRIPTEN_QTDEFS := -DQT_NO_LINKED_LIST -DQT_NO_JAVA_STYLE_ITERATORS -DQT_NO_EXCEPTIONS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+ 
+ ifeq ($(ENABLE_EMSCRIPTEN_JSPI),TRUE)

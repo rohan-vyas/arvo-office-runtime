@@ -1,0 +1,22 @@
+import { readFile,writeFile,mkdir,copyFile,unlink } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { brotliCompressSync,constants } from 'node:zlib';
+import path from 'node:path';
+import { writeOfficeWasmParts } from './adapter/chunked-assets.mjs';
+const [input,output]=process.argv.slice(2);
+if(!input || !output)throw Error('Usage: node package-runtime.mjs <raw-runtime-directory> <fresh-output-directory>');
+const adapter=new URL('./adapter/',import.meta.url);
+const manifest=JSON.parse(await readFile(path.join(input,'source-engine-manifest.json'),'utf8'));
+if(manifest.sourceBuildReceipt.exit!==0 || manifest.sourceBuildReceipt.stopReason)throw Error('Completed source build required');
+const hash=v=>createHash('sha256').update(v).digest('hex');
+for(const asset of manifest.assets){const v=await readFile(path.join(input,asset.name));if(hash(v)!==asset.sha256 || v.length!==asset.bytes)throw Error('Source engine pin mismatch');}
+await mkdir(output); const runtime=path.join(output,'arvo-office');await mkdir(runtime);
+for(const name of ['index.html','runtime.js','runtime.css','office-thread.js','LICENSE.zetajs','zeta.js','wasm-parts.js'])await copyFile(new URL(name,adapter),path.join(runtime,name));
+for(const name of ['soffice.js','soffice.data.js.metadata'])await copyFile(path.join(input,name),path.join(runtime,name));
+const parts=await writeOfficeWasmParts(await readFile(path.join(input,'soffice.wasm')),runtime);
+const data=await readFile(path.join(input,'soffice.data'));const encoded=brotliCompressSync(data,{params:{[constants.BROTLI_PARAM_QUALITY]:5}});if(encoded.length>25*1024*1024)throw Error('Data exceeds single-asset limit');await writeFile(path.join(runtime,'soffice.data'),encoded);
+await writeFile(path.join(runtime,'config.js'),`window.ARVO_OFFICE_PARENT_ORIGIN = "https://arvosystem.com";\nwindow.ARVO_OFFICE_WASM_PARTS = ${JSON.stringify(parts)};\n`);
+await writeFile(path.join(runtime,'wasm-parts.json'),JSON.stringify(parts,null,2)+'\n');
+const headers=['/*','  Cross-Origin-Opener-Policy: same-origin','  Cross-Origin-Embedder-Policy: credentialless','  Cross-Origin-Resource-Policy: cross-origin',"  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self'; connect-src 'self'; img-src 'self' data: blob:; font-src 'self'; frame-ancestors https://arvosystem.com; base-uri 'none'; form-action 'none'",'  X-Content-Type-Options: nosniff','  Referrer-Policy: no-referrer','', '/arvo-office/soffice.data','  Content-Encoding: br','  Content-Type: application/octet-stream','',...parts.parts.flatMap(p=>[`/arvo-office/${p.path}`,'  Content-Encoding: br','  Content-Type: application/octet-stream','  Cache-Control: public, max-age=31536000, immutable',''])];await writeFile(path.join(output,'_headers'),headers.join('\n'),{flag:'wx'});
+await writeFile(path.join(runtime,'engine-provenance.json'),JSON.stringify({status:'Private static-host candidate; source-distribution/publication and authenticated acceptance pending',coreCommit:manifest.coreCommit,compilerCommit:'7f8a05dd4e37cbd7ffde6d624f91fd545f7b52e3',compilerCallbackPatchSHA256:'19c568d7eab9b0b8670b1e7f0594fe957814d982f6db3f7214ee2bb0a099dae2',assets:manifest.assets,sourceBuildReceipt:manifest.sourceBuildReceipt,zetajsSHA256:manifest.zetajsSHA256,vendorBindingPatchApplied:false,dataEncodedBytes:encoded.length,wasmParts:parts.parts.length},null,2)+'\n');
+console.log(JSON.stringify({output,dataEncodedBytes:encoded.length,wasmParts:parts.parts.length,wasmBytes:parts.bytes,publiclyPublished:false}));

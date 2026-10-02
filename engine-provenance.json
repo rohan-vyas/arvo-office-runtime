@@ -1,0 +1,43 @@
+{
+  "status": "Published standalone engine candidate; signed-in Arvo and provider acceptance pending",
+  "coreCommit": "efaf0670b4d055f838a2849becb10f08aa06a257",
+  "compilerCommit": "7f8a05dd4e37cbd7ffde6d624f91fd545f7b52e3",
+  "compilerCallbackPatchSHA256": "19c568d7eab9b0b8670b1e7f0594fe957814d982f6db3f7214ee2bb0a099dae2",
+  "assets": [
+    {
+      "name": "soffice.js",
+      "bytes": 856518,
+      "sha256": "a774682240edbe50ab2ae32d10c00627350a48c69327d396b74ede6082e0a00b"
+    },
+    {
+      "name": "soffice.wasm",
+      "bytes": 161479998,
+      "sha256": "2e4a486ff76336b40a1a97c53a10c71e4cdebb3ef344a875c19fe37d0ef4b84d"
+    },
+    {
+      "name": "soffice.data",
+      "bytes": 99741099,
+      "sha256": "f3b90af02eecde9057ca15ea8afe4eacb773eb794c4c98181fef7f13930a23f0"
+    },
+    {
+      "name": "soffice.data.js.metadata",
+      "bytes": 215226,
+      "sha256": "2fcc3d22d8f9a53c4fffd307040c70546ae07381dee82641e34cdb2fd6e94ce8"
+    }
+  ],
+  "sourceBuildReceipt": {
+    "exit": 0,
+    "elapsedSeconds": 716,
+    "maxProcessGroupRSSKiB": 5452208,
+    "stopReason": null,
+    "workers": 8,
+    "productionDeployed": false,
+    "stage": "Office core source build only"
+  },
+  "zetajsSHA256": "ee633709bfa1de3221e8f68beb395f68fd5ff00cab9e33ba22e97e8271b348b4",
+  "vendorBindingPatchApplied": false,
+  "dataEncodedBytes": 20000412,
+  "wasmParts": 10,
+  "sourceURL": "https://github.com/rohan-vyas/arvo-office-runtime/releases/download/engine-2026-10-02/arvo-office-corresponding-source.zip",
+  "sourceSHA256": "efb209336d755367e5746353713443d38d60a2f501903282a1d5e31389972b3d"
+}

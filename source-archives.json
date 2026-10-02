@@ -1,0 +1,45 @@
+{
+  "preparedAtUTC": "2026-10-02T12:43:40.619833+00:00",
+  "upstreamArchives": [
+    {
+      "component": "LibreOffice-core",
+      "commit": "efaf0670b4d055f838a2849becb10f08aa06a257",
+      "archive": "LibreOffice-core-efaf0670b4d055f838a2849becb10f08aa06a257.tar.gz",
+      "bytes": 334562599,
+      "sha256": "df949d6dddbd77ec3f8c1590e691ef4a3fec5741154d06ed4181c81e1f4bfc9c",
+      "patch": "LibreOffice-core.patch"
+    },
+    {
+      "component": "Qt5",
+      "commit": "3d440b7787f9b5ba15e5f8bcd7aef39b388f94fa",
+      "archive": "Qt5-3d440b7787f9b5ba15e5f8bcd7aef39b388f94fa.tar.gz",
+      "bytes": 2075938,
+      "sha256": "2a28cccf90170b9315cb9c8809df4344c9f670c331e65bfe17465e6ce158d74d",
+      "patch": "Qt5.patch"
+    },
+    {
+      "component": "Qtbase",
+      "commit": "a320678c85ec8029d5394bcd673d4c208af1de3a",
+      "archive": "Qtbase-a320678c85ec8029d5394bcd673d4c208af1de3a.tar.gz",
+      "bytes": 67832166,
+      "sha256": "3b1ce4a5394a441006871936d16cecbe37f3cc1e5056bcf5db5153bf51c1cf86",
+      "patch": "Qtbase.patch"
+    },
+    {
+      "component": "Emscripten-SDK",
+      "commit": "e566f7bdcc7735f44037911c24b87a58a3c93145",
+      "archive": "Emscripten-SDK-e566f7bdcc7735f44037911c24b87a58a3c93145.tar.gz",
+      "bytes": 176140,
+      "sha256": "f2ca5f6e22a19f5b515f25ef504a75f96ee54bf83c1ec6c3202ecac5d7e09dea",
+      "patch": "Emscripten-SDK.patch"
+    }
+  ],
+  "verifiedExternalSourceArchives": 89,
+  "scope": "Private preparation only; no engine binary complete or public distribution approved",
+  "remaining": [
+    "Matching final engine outputs and actual linked component inventory",
+    "SDK compiler exact source and binary bootstrap receipts",
+    "Full distribution notices and source/rebuild instructions",
+    "Final isolated-runtime licence boundary review"
+  ]
+}
