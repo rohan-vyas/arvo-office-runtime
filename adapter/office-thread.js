@@ -43,6 +43,14 @@ Module.zetajs.then(function(zetajs) {
         ]);
         zetajs.mainPort.postMessage({ cmd: 'exported', requestId: data.requestId });
       }
+      // FullScreen can capture the engine's startup dimensions before the
+      // browser resize callback settles. Apply the actual isolated canvas
+      // bounds explicitly; this changes only the window, never the model.
+      if (data.cmd === 'resize' && model && Number.isInteger(data.width) && Number.isInteger(data.height) &&
+          data.width > 0 && data.height > 0 && data.width <= 8192 && data.height <= 8192 &&
+          data.width * data.height <= 16777216) {
+        model.getCurrentController().getFrame().getContainerWindow().setPosSize(0, 0, data.width, data.height, 15);
+      }
     } catch { zetajs.mainPort.postMessage({ cmd: 'error' }); }
   };
   zetajs.mainPort.postMessage({ cmd: 'engine_ready' });

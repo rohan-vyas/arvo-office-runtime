@@ -13,6 +13,25 @@ var opened = false;
 var filename = null;
 var exportRequest = null;
 var maxBytes = 4194304;
+var documentLoaded = false;
+var resizeQueued = false;
+function resizeSelectedWindow() {
+  if (!documentLoaded || startupFailed || !thrPort || resizeQueued) return;
+  resizeQueued = true;
+  requestAnimationFrame(function() {
+    resizeQueued = false;
+    if (!documentLoaded || startupFailed || !thrPort) return;
+    var rect = canvas.getBoundingClientRect();
+    // UNO window bounds use device pixels; DOM geometry uses CSS pixels.
+    var ratio = window.devicePixelRatio || 1;
+    if (!Number.isFinite(ratio) || ratio <= 0 || ratio > 4) return;
+    var width = Math.round(rect.width * ratio), height = Math.round(rect.height * ratio);
+    if (width > 0 && height > 0 && width <= 8192 && height <= 8192 && width * height <= 16777216)
+      thrPort.postMessage({ cmd: 'resize', width: width, height: height });
+  });
+}
+window.addEventListener('resize', resizeSelectedWindow);
+if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resizeSelectedWindow).observe(canvas);
 function reply(data, transfer) {
   if (!binding) return;
   parent.postMessage(Object.assign({ protocol: 'arvo-office-v1', nonce: binding.nonce }, data),
@@ -69,6 +88,7 @@ engine.onload = function() {
       var data = event.data;
       if (data.cmd === 'engine_ready') { engineReady = true; reply({ type: 'ready' }); }
       if (data.cmd === 'loaded') {
+        documentLoaded = true;
         loading.style.display = 'none'; canvas.style.visibility = 'visible';
         window.dispatchEvent(new Event('resize')); reply({ type: 'loaded' });
       }
