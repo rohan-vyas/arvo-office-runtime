@@ -1972,8 +1972,8 @@
     },
     {
       "path": "adapter/office-thread.js",
-      "bytes": 2801,
-      "sha256": "5d42e04ba0cb762db18f0728909c4eab0116ee7aa9ab2da76fd247533a953f4e"
+      "bytes": 3530,
+      "sha256": "2b9a23cbb69a4a54377fd46e9a4c6bd9fd446811523eb999496818a430c67259"
     },
     {
       "path": "adapter/runtime.css",

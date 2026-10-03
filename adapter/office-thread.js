@@ -22,11 +22,14 @@ Module.zetajs.then(function(zetajs) {
         var filter = model.getArgs().find(function(value) { return value.Name === 'FilterName'; });
         if (filter && typeof filter.Value === 'string' && filter.Value.length > 0) selectedFilter = filter.Value;
         if (!selectedFilter) throw new Error('selected_export_unavailable');
-        // Polling can miss edit + native Save between polls. Every model
-        // change latches provider-unsaved state, even if the engine then
-        // writes its private filesystem and clears isModified().
+        // Modification broadcasts also cover state/view changes. Consult
+        // the model flag at the event, rather than polling later or treating
+        // a clean layout/native-save event as an edit. The parent latches a
+        // real edit until the guarded Microsoft save is confirmed.
         modifyListener = zetajs.unoObject([css.util.XModifyListener], {
-          modified: function() { zetajs.mainPort.postMessage({ cmd: 'modified', modified: true }); },
+          modified: function() {
+            if (model.isModified()) zetajs.mainPort.postMessage({ cmd: 'modified', modified: true });
+          },
           disposing: function() { /* The selected model cannot be replaced. */ },
         });
         model.addModifyListener(modifyListener);
