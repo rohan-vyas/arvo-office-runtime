@@ -39,5 +39,7 @@
   "dataEncodedBytes": 20000412,
   "wasmParts": 10,
   "sourceURL": "https://github.com/rohan-vyas/arvo-office-runtime/releases/download/engine-2026-10-02/arvo-office-corresponding-source.zip",
-  "sourceSHA256": "efb209336d755367e5746353713443d38d60a2f501903282a1d5e31389972b3d"
+  "sourceSHA256": "efb209336d755367e5746353713443d38d60a2f501903282a1d5e31389972b3d",
+  "sourceMaterialsURL": "https://github.com/rohan-vyas/arvo-office-runtime/releases/download/source-materials-2026-10-06/arvo-office-corresponding-source-materials-20261006.zip",
+  "sourceMaterialsStatus": "Local candidate, not published; original sourceURL and sourceSHA256 identify the unchanged engine source base"
 }

@@ -1288,8 +1288,8 @@
     },
     {
       "path": "MATERIALS-UPDATE.md",
-      "bytes": 2058,
-      "sha256": "c8e592c00fe317bce6a827e306c9472a5d31f8143ed183ed342062634f9dea01"
+      "bytes": 2544,
+      "sha256": "c2f7db811e03bea650e64b02499830e8a01c41fc09d138fb0fa2376288de6a4d"
     },
     {
       "path": "NOTICE",
@@ -1412,6 +1412,11 @@
       "sha256": "b859345cdeee259a290779eb2a5b8aa08c9cd8cdf29d9409a3ef6022092a36b7"
     },
     {
+      "path": "PUBLICATION.md",
+      "bytes": 2526,
+      "sha256": "bc21dda8e43a9b2389074ab1770a1818016d4c7cfbbe0ea9d65b5b93d0ba2e82"
+    },
+    {
       "path": "Qt5.patch",
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -1433,8 +1438,8 @@
     },
     {
       "path": "SOURCE.md",
-      "bytes": 517,
-      "sha256": "5d808feed4f4318aab9103914dd5e9d76a8ef9fadecff2669b5cf1ffc7adab52"
+      "bytes": 968,
+      "sha256": "ef652c2569320e7fbd809709c406dbad66ede26132b7196758a9027944a510f3"
     },
     {
       "path": "Sources/Emscripten-7f8a05dd4e37cbd7ffde6d624f91fd545f7b52e3.tar.gz",
@@ -1993,8 +1998,8 @@
     },
     {
       "path": "about.html",
-      "bytes": 1263,
-      "sha256": "629f776e4dcd3f260c856fd0efacb5fb5fbc03ae7c85b012013a78a95cdfe40a"
+      "bytes": 1536,
+      "sha256": "83cd28c00916168e217d3f4b07b441bf5505c53926d806fd403ddaa876ee273d"
     },
     {
       "path": "adapter/LICENSE.zetajs",
@@ -2058,8 +2063,8 @@
     },
     {
       "path": "engine-provenance.json",
-      "bytes": 1633,
-      "sha256": "527cb73d4efd1da6b127d1cc641bbb10a9daae4c46e01b65b1daa622695c6696"
+      "bytes": 1952,
+      "sha256": "0a9888fc7c3535a36ba5e448d667d807534a67d2ba6b288001da8100e8684d82"
     },
     {
       "path": "package-runtime.mjs",
