@@ -1,19 +1,30 @@
 {
-  "status": "Private curated standalone engine source candidate; public distribution decision and correspondence review pending",
+  "status": "Local corrected source-materials candidate; pinned 2 October engine/source published, this additive update not published",
   "proprietaryArvoParentIncluded": false,
   "credentialsIncluded": false,
   "userDocumentsIncluded": false,
   "compiledEngineIncluded": false,
+  "baseSourceSHA256": "efb209336d755367e5746353713443d38d60a2f501903282a1d5e31389972b3d",
   "files": [
     {
       "path": "BUILDING.md",
-      "bytes": 4702,
-      "sha256": "8b943b3115febbb6b55e98a4b1b99ae501a92a8fbd530f251cf1c80805615138"
+      "bytes": 6225,
+      "sha256": "cc4d2118c20f121a860c47e9a242ac05fd89a0f09455dd8e4fd680d486ca3143"
+    },
+    {
+      "path": "COPYING",
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
     },
     {
       "path": "COPYING.GPL-3.0",
       "bytes": 35147,
       "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    {
+      "path": "Component notices inventory.json",
+      "bytes": 48063,
+      "sha256": "c1e50499918ae3c6084c391756096ec6c485f4289b2c17f349a0efdcefa6ef4c"
     },
     {
       "path": "Component notices/Qtbase/LICENSE.FDL",
@@ -116,14 +127,14 @@
       "sha256": "034f6dc665180948cc53319d6e477a5043b529df992c89d1dcb44f010593fbef"
     },
     {
-      "path": "Component notices/Qtbase/src/3rdparty/harfbuzz/COPYING",
-      "bytes": 1241,
-      "sha256": "ed7c20569a8f7daa06d2032b21bf240c5b6d8a0acb572d775bc6e78e61811191"
-    },
-    {
       "path": "Component notices/Qtbase/src/3rdparty/harfbuzz-ng/COPYING",
       "bytes": 1690,
       "sha256": "2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216"
+    },
+    {
+      "path": "Component notices/Qtbase/src/3rdparty/harfbuzz/COPYING",
+      "bytes": 1241,
+      "sha256": "ed7c20569a8f7daa06d2032b21bf240c5b6d8a0acb572d775bc6e78e61811191"
     },
     {
       "path": "Component notices/Qtbase/src/3rdparty/iaccessible2/LICENSE",
@@ -1241,11 +1252,6 @@
       "sha256": "f898e43b397754b7d345d38f6d37803fa5939e9f8d73a231669f9c39c79fee75"
     },
     {
-      "path": "Component notices inventory.json",
-      "bytes": 48063,
-      "sha256": "c1e50499918ae3c6084c391756096ec6c485f4289b2c17f349a0efdcefa6ef4c"
-    },
-    {
       "path": "Declared external link dependencies.json",
       "bytes": 1218,
       "sha256": "96cfb194b99613af85983d926b7accf11d9038249c4c2cd95754dd9eae8655bf"
@@ -1279,6 +1285,16 @@
       "path": "LibreOffice-core.patch",
       "bytes": 10241,
       "sha256": "64e82fa8f2774b69e25cdd6bc6c854d2d6a766a8aba79c75fa59277bac4dde6f"
+    },
+    {
+      "path": "MATERIALS-UPDATE.md",
+      "bytes": 2058,
+      "sha256": "c8e592c00fe317bce6a827e306c9472a5d31f8143ed183ed342062634f9dea01"
+    },
+    {
+      "path": "NOTICE",
+      "bytes": 2534,
+      "sha256": "710268df71b1ace277778e12d308aed448bc592f0bd808a3117fa83bf2a43001"
     },
     {
       "path": "Notices/Emscripten-AUTHORS",
@@ -1404,6 +1420,21 @@
       "path": "Qtbase.patch",
       "bytes": 453,
       "sha256": "5948d2a430ac43b1fa4bf5857c171b3263d155287c55e9a8c183d5ab12b59b63"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2578,
+      "sha256": "14c0d4d2067c4766c6d332dee88a78ff334917ed9a06cfcac99709fd67b0d6db"
+    },
+    {
+      "path": "RELEASE.md",
+      "bytes": 704,
+      "sha256": "ca41170c71066759d0bfc48f50e60130e243d4290be279af31d95ef10087e309"
+    },
+    {
+      "path": "SOURCE.md",
+      "bytes": 517,
+      "sha256": "5d808feed4f4318aab9103914dd5e9d76a8ef9fadecff2669b5cf1ffc7adab52"
     },
     {
       "path": "Sources/Emscripten-7f8a05dd4e37cbd7ffde6d624f91fd545f7b52e3.tar.gz",
@@ -1956,6 +1987,16 @@
       "sha256": "294764be47f3cb6b91e58eb72b4471d19c9c9ab0dad699fe60e707496c29ab2b"
     },
     {
+      "path": "about.css",
+      "bytes": 283,
+      "sha256": "159f087b04430ff35fe1e2d933d6d2c932b08a337a9f5382b65fc9406c553375"
+    },
+    {
+      "path": "about.html",
+      "bytes": 1263,
+      "sha256": "629f776e4dcd3f260c856fd0efacb5fb5fbc03ae7c85b012013a78a95cdfe40a"
+    },
+    {
       "path": "adapter/LICENSE.zetajs",
       "bytes": 1098,
       "sha256": "a8c9b7d037ed112c3b9f85d5a1122aedd218947b21cf3f2c4200d13d7fe1a7d9"
@@ -1972,8 +2013,8 @@
     },
     {
       "path": "adapter/office-thread.js",
-      "bytes": 3530,
-      "sha256": "2b9a23cbb69a4a54377fd46e9a4c6bd9fd446811523eb999496818a430c67259"
+      "bytes": 7743,
+      "sha256": "c3ba710eea52b1c5773a3c9dcf687ec5772901c049b3f0b6145f5cad138825eb"
     },
     {
       "path": "adapter/runtime.css",
@@ -1982,8 +2023,8 @@
     },
     {
       "path": "adapter/runtime.js",
-      "bytes": 4624,
-      "sha256": "41cf7d757d74d342a0df68f495a85ab0d57c0cb1ce8b9d7ed5822ff55f293ab8"
+      "bytes": 6743,
+      "sha256": "4fba3f829ce1198f9fe95a602a7f89d5a2e9288194b095cc950b54866364c96d"
     },
     {
       "path": "adapter/wasm-parts.js",
@@ -2001,6 +2042,11 @@
       "sha256": "a2eb6d3e534f996306daa0621185e7693f962c2a2218a4f09966cd349f209e91"
     },
     {
+      "path": "create-engine-manifest.mjs",
+      "bytes": 1634,
+      "sha256": "0e1d21304a2f3231cea2523d5b7c3ad1c8a637b4c5598a1716351f5fc921eb47"
+    },
+    {
       "path": "download.lst",
       "bytes": 30296,
       "sha256": "d211d7f90d8f2eabe8e8f1291359b2832c4e196320c2f273d727919fa91dd593"
@@ -2011,14 +2057,24 @@
       "sha256": "19c568d7eab9b0b8670b1e7f0594fe957814d982f6db3f7214ee2bb0a099dae2"
     },
     {
+      "path": "engine-provenance.json",
+      "bytes": 1633,
+      "sha256": "527cb73d4efd1da6b127d1cc641bbb10a9daae4c46e01b65b1daa622695c6696"
+    },
+    {
       "path": "package-runtime.mjs",
-      "bytes": 3592,
-      "sha256": "5755749ba7bb3f15d3e0b142ee79945c14096accf6408fcdb872e80250d2ba41"
+      "bytes": 3296,
+      "sha256": "4b6c5c79947ef4e342c4f8ff75d35b0ff45b6f848ec128888ee077731deb6eb0"
     },
     {
       "path": "source-archives.json",
       "bytes": 1809,
       "sha256": "9b64fcf6242f879de5564a8126f03fdad80b7e86716257b8781353f4d729c1e8"
+    },
+    {
+      "path": "tests/source-assembly.test.mjs",
+      "bytes": 3862,
+      "sha256": "d1b6fff208c5102e793e4010b3f09a5c3322043b741aabbd5a9d15334555cda2"
     }
   ]
 }

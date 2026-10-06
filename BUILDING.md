@@ -1,6 +1,6 @@
 # Building the standalone Office runtime
 
-This candidate contains public upstream sources, engine modifications and the isolated adapter only. It contains no proprietary Arvo parent, credentials or user documents. The separate runtime is intended for a GPL-3.0-or-later distribution with each component retaining its own notices. Public distribution and final source correspondence are not yet accepted.
+This published source base contains public upstream sources, engine modifications and the isolated adapter only. It contains no proprietary Arvo parent, credentials or user documents. The separate runtime is intended for a GPL-3.0-or-later distribution with each component retaining its own notices. The pinned engine and corresponding-source archive were published on 2 October 2026. This additive assembly/materials update is prepared locally; it does not claim a fresh deployment or a legal review.
 
 ## Sources and modifications
 
@@ -33,7 +33,17 @@ make -j8 PARALLELISM=8 PKG_CONFIG="$office_tool_prefix/bin/pkg-config" build
 
 The completed build outputs soffice.js, soffice.wasm, soffice.data and soffice.data.js.metadata under core/instdir/program. Preserve their exact hashes before assembling a runtime. The placeholder soffice.worker.js is unused: this SDK uses soffice.js for pthread workers. Use the pinned zetajs source included here and the adapter directory. Keep config.js's parent origin exact; don't allow arbitrary origins or pass authentication/provider secrets to the runtime. The current first-release document export cap is 4 MiB.
 
-The initial full source build and corrected callback relink completed successfully. Source patches restored byte-for-byte. A second completely clean full rebuild and public distribution have not been claimed; browser/provider acceptance is recorded separately.
+The initial full source build and corrected callback relink completed successfully. Source patches restored byte-for-byte. The corrected engine and source were published on 2 October 2026. A second completely clean full rebuild has not been claimed; browser/provider acceptance is recorded separately.
+
+## Create the assembly input manifest
+
+Use the four **raw, uncompressed** outputs from the completed corrected build. Run:
+
+```sh
+node create-engine-manifest.mjs "$office_raw_runtime"
+```
+
+This checks all four lengths and SHA-256 hashes against `engine-provenance.json`, then exclusively creates `source-engine-manifest.json` in that directory. It refuses changed/missing outputs or an existing manifest. The retained receipt records the 2 October build; this operation does not claim a new build or bless different engine bytes. For a new compilation, independently record and review its provenance before changing these pins. Compressed hosting files are not raw build inputs.
 
 ## Static-host assembly
 
@@ -44,3 +54,7 @@ node package-runtime.mjs "$office_raw_runtime" "$office_fresh_static_output"
 ```
 
 The destination must not exist. The script emits the exact-parent `https://arvosystem.com` policy and intact `/arvo-office/` URL, compressed data and ten independently verified WASM parts. It adds no provider URLs, credentials or user documents. Rebuild it with an explicitly reviewed exact parent origin for another deployment; do not use wildcard framing. Engine source, component notices and build materials must accompany public distribution. This script does not enable Arvo’s authenticated editor gates.
+
+The assembler includes `COPYING`, `NOTICE`, `LibreOffice-LICENSE.html`, `SOURCE.md`, and the about HTML/CSS pages automatically. It keeps component terms and the corresponding-source pointer. The ten WASM parts and compressed data retain the original engine pins. No vendor-binary correspondence is assumed.
+
+Verify the actual retained raw inputs with `OFFICE_RAW_ENGINE_DIRECTORY="$office_raw_runtime" node --test tests/source-assembly.test.mjs`. The source archives and patches support a source rebuild/relink; no separate proprietary application object kit is supplied. This is an artifact statement, not a legal interpretation of all component obligations.

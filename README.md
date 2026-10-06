@@ -20,3 +20,7 @@ Engine build: 2 October 2026. Writer/Calc/Impress local edit/export tests passed
 The source archive is 980,743,534 bytes, SHA-256 `efb209336d755367e5746353713443d38d60a2f501903282a1d5e31389972b3d`. The source manifest lists 403 files. Static assembly reproduced the candidate's 24 runtime assets/configuration/headers byte-for-byte. A second clean engine compilation has not been claimed.
 
 No warranty is provided. See the applicable licences. All trademarks remain their owners' property.
+
+## Additive assembly-materials correction
+
+See [MATERIALS-UPDATE.md](MATERIALS-UPDATE.md). `create-engine-manifest.mjs` verifies the retained corrected engine outputs and creates the missing input for static assembly; the assembler includes licence/source pages. This local update is not a publication or new engine build.

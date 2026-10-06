@@ -56,6 +56,12 @@ window.addEventListener('message', function(event) {
     return;
   }
   if (!binding || data.nonce !== binding.nonce || !engineReady || !thrPort) return;
+  if (data.type === 'view' && documentLoaded && !exportRequest && typeof data.requestId === 'string' &&
+      data.requestId.length > 0 && data.requestId.length <= 128 && (data.mode === 'fit' ||
+      (data.mode === 'zoom' && Number.isInteger(data.zoom) && data.zoom >= 20 && data.zoom <= 200))) {
+    thrPort.postMessage({ cmd: 'view', requestId: data.requestId, mode: data.mode,
+      ...(data.mode === 'zoom' ? { zoom: data.zoom } : {}) });
+  }
   if (data.type === 'open' && !opened && typeof data.name === 'string' && data.name.length <= 2000 &&
     data.bytes instanceof ArrayBuffer && data.bytes.byteLength > 0 && data.bytes.byteLength <= maxBytes) {
     var extension = data.name.split('.').pop().toLowerCase();
@@ -93,6 +99,14 @@ engine.onload = function() {
         window.dispatchEvent(new Event('resize')); reply({ type: 'loaded' });
       }
       if (data.cmd === 'modified') reply({ type: 'modified', modified: data.modified === true });
+      if (data.cmd === 'view_ready' && documentLoaded && ['docx', 'xlsx', 'pptx'].includes(data.format) &&
+          Number.isInteger(data.zoom) && data.zoom >= 1 && data.zoom <= 400)
+        reply({ type: 'view-ready', format: data.format, zoom: data.zoom });
+      if (data.cmd === 'view_result' && typeof data.requestId === 'string' && data.requestId.length > 0 &&
+          data.requestId.length <= 128 && (data.ok === false || (data.ok === true &&
+          Number.isInteger(data.zoom) && data.zoom >= 1 && data.zoom <= 400)))
+        reply({ type: 'view-result', requestId: data.requestId, ok: data.ok,
+          ...(data.ok ? { zoom: data.zoom } : {}) });
       if (data.cmd === 'exported' && exportRequest && data.requestId === exportRequest) {
         var id = exportRequest; exportRequest = null;
         try {
